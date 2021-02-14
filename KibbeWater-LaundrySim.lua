@@ -12,6 +12,22 @@ what = hookfunction(getrawmetatable(game).__namecall, function(self, ...)
    return what(self, ...)
 end)
 
+--Gamepass giver (again thanks MrxDinosaur)
+local me = game.Players.LocalPlayer
+
+for i,v in pairs(me.Gamepasses:GetChildren()) do
+   v.Value = true
+end
+
+me.NonSaveVars.TempCoinBoost.Value = true
+
+--Anti AFK (Thanks thesillybob)
+local VirtualUser = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+VirtualUser:CaptureController()
+VirtualUser:ClickButton2(Vector2.new())
+end)
+
 --GUI
 local GUI = loadstring(game:HttpGet("https://kibbewater.xyz/rbx/UILib"))()
 local home = GUI:CreateWindow("Farm")
@@ -101,7 +117,7 @@ function FillBasket()
             Teleport(clothingPart.CFrame)
             EventList.GrabClothing:FireServer(clothingPart);
         end
-        wait(0.1)
+        wait(0.11)
     end
 end
 
@@ -145,7 +161,7 @@ home:Toggle('Full Auto', {flag = "fullAuto"})
 home:Toggle('Pause refill', {flag = "pauseRefill"})
 
 while true do
-    if home.flags.fullAuto then
+    if home.flags.fullAuto and not pLocal.PlayerGui.EditMode.Frame.Visible then
         local washers = machines:GetChildren();
         for i=1, #washers do
             local thisWasher = washers[i];
@@ -165,5 +181,5 @@ while true do
             end
         end
     end
-    wait(0.01)
+    wait(0.06)
 end
